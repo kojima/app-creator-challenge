@@ -1,1 +1,5 @@
-![alt text](./drop-game-sh.png "Drop game screenshot")
+# ゲーム完成イメージ
+
+<img src="./drop-game-sh.png" width="360" />
+
+画面をタップしてバケツを移動し、落ちてくる雨をキャッチするゲーム！
