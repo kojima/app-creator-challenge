@@ -14,11 +14,14 @@
 
 ## ゲームプロジェクトを作成
 1. 「準備」の3で展開したフォルダ中の libGDX.bat ファイルをダブルクリックする(画像参照)
+
 <img src="./libgdx-bat.png" height="240" style="margin: 16px">
 2. 以下のウィンドウが起動する:
+
 <img src="./libgdx-setup.png" height="320" style="margin: 16px">
 3. Android Studioを起動し、「File > Other Settings > Default Project Structure...」をクリック
 4. Android SDK location のパスをコピーする(画像参照)
+
 <img src="./android-studio-project-structure.png" height="320" style="margin: 16px">
 5. 2で起動したウィンドウに以下の内容を入力する:
  * Name: __drop__
@@ -38,6 +41,7 @@
 
 ## スタータークラスを設定する
 1. Android Studioのプロジェクトタブから`AndroidLauncher.java`を探し出し、ダブルクリック(画像参照)
+
 <img src="./project-androidlauncher.png" height="320" style="margin: 16px">
 2. `AndroidLauncher.java`の`onCreate`メソッドを以下のように変更する:
 
@@ -65,12 +69,14 @@ public class AndroidLauncher extends AndroidApplication {
 
 ## ゲームアセットの追加
 1. Android Studioのプロジェクトタブから__assets__フォルダを探し出し、右クリック(画像参照)
+
 <img src="./project-assets.png" height="320" style="margin: 16px">
 2. 表示されたポップアップ中の__Show in Explorer__をクリック
 
 ## ゲームコード
 ゲーム中で使用するアセット(画像や効果音など)を読み込みます。
 1. Android Studioのプロジェクトタブから`Drop.java`を探し出し、ダブルクリック(画像参照)
+
 <img src="./project-drop.png" height="320" style="margin: 16px">
 
 ## ソースコード全体
