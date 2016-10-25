@@ -16,12 +16,13 @@
 1. 「準備」の3で展開したフォルダ中の libGDX.bat ファイルをダブルクリックする(画像参照)
 <img src="./libgdx_bat.png" height="240" style="margin: 16px">
 2. 以下のウィンドウが起動する:
+<img src="./libgdx_setup.png" height="240" style="margin: 16px">
 3. Android Studioを起動し、「File > Other Settings > Default Project Structure...」をクリック
 4. Android SDK location のパスをコピーする(画像参照)
 5. 2で起動したウィンドウに以下の内容を入力する:
- * Name: drop
- * Package: com.example.drop
- * Game class: Drop
+ * Name: __drop__
+ * Package: __com.example.drop__
+ * Game class: __Drop__
  * Destination: <span style="color: #e74c3c;">各自プロジェクトを保存する場所を指定</span>
  * Android SDK: <span style="color: #e74c3c;">4でコピーしたパスをペースト(貼り付け)</span>
  * Sub Projects: **Android**のみチェック
@@ -34,11 +35,54 @@
 3. 「ゲームプロジェクトを作成」の5のDestinationで指定した場所を選択して、「OK」をクリック
 4. 新しいウィンドウが開き、プロジェクトが表示される
 
+## スタータークラスを設定する
+1. Android Studioのプロジェクトタブから`AndroidLauncher.java`を探し出し、ダブルクリック(画像参照)
+2. `AndroidLauncher.java`の`onCreate`メソッドを以下のように変更する:
+``` java
+package com.example.drop;
+
+import android.os.Bundle;
+
+import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
+public class AndroidLauncher extends AndroidApplication {
+	@Override
+	protected void onCreate (Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useAccelerometer = false;
+		config.useCompass = false;
+		initialize(new Drop(), config);
+	}
+}
+```
 
 ## ソースコード全体
-すべてのDropクラスのコードは以下の通りです:
+今回作成したゲームの全ソースコードは以下の通りです:
+### `AndroidLauncher.java`
+``` java
+package com.example.drop;
+
+import android.os.Bundle;
+
+import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
+public class AndroidLauncher extends AndroidApplication {
+	@Override
+	protected void onCreate (Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useAccelerometer = false;
+		config.useCompass = false;
+		initialize(new Drop(), config);
+	}
+}
+```
+### `Drop.java`
 ```java
-package com.badlogic.drop;
+package com.example.drop;
 
 import java.util.Iterator;
 
@@ -70,31 +114,31 @@ public class Drop extends ApplicationAdapter {
 
    @Override
    public void create() {
-      // load the images for the droplet and the bucket, 64x64 pixels each
+      // 64ピクセル x 64ピクセルの雨粒とバケツの画像を読み込みます
       dropImage = new Texture(Gdx.files.internal("droplet.png"));
       bucketImage = new Texture(Gdx.files.internal("bucket.png"));
 
-      // load the drop sound effect and the rain background "music"
+      // 水滴の効果音と雨のBGMを読み込みます
       dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
       rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
-      // start the playback of the background music immediately
+      // 雨のBGMを再生します
       rainMusic.setLooping(true);
       rainMusic.play();
 
-      // create the camera and the SpriteBatch
+      // カメラとSpriteBatchを生成します
       camera = new OrthographicCamera();
       camera.setToOrtho(false, 800, 480);
       batch = new SpriteBatch();
 
-      // create a Rectangle to logically represent the bucket
+      // バケツをプログラムで扱うための四角形を生成します
       bucket = new Rectangle();
-      bucket.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-      bucket.y = 20; // bottom left corner of the bucket is 20 pixels above the bottom screen edge
+      bucket.x = 800 / 2 - 64 / 2; // 横方向の中心にバケツを配置します
+      bucket.y = 20; // バケツの左下が画面下端から20ピクセル離れた位置になるように配置します
       bucket.width = 64;
       bucket.height = 64;
 
-      // create the raindrops array and spawn the first raindrop
+      // 雨粒用の配列を生成し、最初の雨粒を生成します
       raindrops = new Array<Rectangle>();
       spawnRaindrop();
    }
@@ -111,22 +155,20 @@ public class Drop extends ApplicationAdapter {
 
    @Override
    public void render() {
-      // clear the screen with a dark blue color. The
-      // arguments to glClearColor are the red, green
-      // blue and alpha component in the range [0,1]
-      // of the color to be used to clear the screen.
+      // スクリーンをダーク・ブルーに塗りつぶします。
+      // glClearColorの引数は、赤/緑/青/透明度の4つで、
+      // 0から1の範囲の小数でします。指定した色が画面色になります。
       Gdx.gl.glClearColor(0, 0, 0.2f, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-      // tell the camera to update its matrices.
+      // カメラ用の配列をアップデートします
       camera.update();
 
-      // tell the SpriteBatch to render in the
-      // coordinate system specified by the camera.
+      // SpriteBatchに、カメラで指定された座標系に
+      // レンダリングするよう命令します
       batch.setProjectionMatrix(camera.combined);
 
-      // begin a new batch and draw the bucket and
-      // all drops
+      // 新しいバッチを開始して、バケツとすべての雨粒を描画します
       batch.begin();
       batch.draw(bucketImage, bucket.x, bucket.y);
       for(Rectangle raindrop: raindrops) {
@@ -134,26 +176,24 @@ public class Drop extends ApplicationAdapter {
       }
       batch.end();
 
-      // process user input
+      // ユーザーの入力を処理します
       if(Gdx.input.isTouched()) {
          Vector3 touchPos = new Vector3();
          touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
          camera.unproject(touchPos);
          bucket.x = touchPos.x - 64 / 2;
       }
-      if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-      if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
 
-      // make sure the bucket stays within the screen bounds
+      // バケツが画面内に留まるように制御します
       if(bucket.x < 0) bucket.x = 0;
       if(bucket.x > 800 - 64) bucket.x = 800 - 64;
 
-      // check if we need to create a new raindrop
+      // 新しい雨粒を生成すべきかチェックします
       if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
-      // move the raindrops, remove any that are beneath the bottom edge of
-      // the screen or that hit the bucket. In the later case we play back
-      // a sound effect as well.
+      // 雨粒を下に動かします。
+      // 画面下端に到達した雨粒や、バケツに触れた雨粒は削除します。
+      // 雨粒がバケツに触れた場合は、水滴の効果音を再生します。
       Iterator<Rectangle> iter = raindrops.iterator();
       while(iter.hasNext()) {
          Rectangle raindrop = iter.next();
@@ -168,7 +208,7 @@ public class Drop extends ApplicationAdapter {
 
    @Override
    public void dispose() {
-      // dispose of all the native resources
+      // 読み込んだリソースを破棄します
       dropImage.dispose();
       bucketImage.dispose();
       dropSound.dispose();
