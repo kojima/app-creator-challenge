@@ -92,6 +92,212 @@ class GameScene: SKScene {
 }
 ```
 
+``` swift
+//
+//  GameScene.swift
+//  drop
+//
+//  Created by Hidenori Kojima on 2016/10/25.
+//  Copyright © 2016年 Hidenori Kojima. All rights reserved.
+//
+
+import SpriteKit
+import GameplayKit
+
+class GameScene: SKScene {
+
+    private var label : SKLabelNode?
+    private var spinnyNode : SKShapeNode?
+
+    override func didMove(to view: SKView) {
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    override func update(_ currentTime: TimeInterval) {
+        // Called before each frame is rendered
+    }
+}
+```
+
+## `GameViewController.swift`
+``` swift
+//
+//  GameViewController.swift
+//  drop
+//
+//  Created by Hidenori Kojima on 2016/10/25.
+//  Copyright © 2016年 Hidenori Kojima. All rights reserved.
+//
+
+import UIKit
+import SpriteKit
+import GameplayKit
+
+class GameViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if let view = self.view as! SKView? {
+            // Load the SKScene from 'GameScene.sks'
+            if let scene = SKScene(fileNamed: "GameScene") {
+                // Set the scale mode to scale to fit the window
+                scene.scaleMode = .resizeFill
+
+                // Present the scene
+                view.presentScene(scene)
+            }
+
+            view.ignoresSiblingOrder = true
+
+            view.showsFPS = true
+            view.showsNodeCount = true
+        }
+    }
+
+    override var shouldAutorotate: Bool {
+        return true
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .allButUpsideDown
+        } else {
+            return .all
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Release any cached data, images, etc that aren't in use.
+    }
+
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+}
+```
+
+## `GameScene.swift`
+``` swift
+//
+//  GameScene.swift
+//  drop
+//
+//  Created by Hidenori Kojima on 2016/10/25.
+//  Copyright © 2016年 Hidenori Kojima. All rights reserved.
+//
+
+import SpriteKit
+import GameplayKit
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
+
+    private let dropletCategory: UInt32 = 0x1 << 1
+    private let bucketCategory: UInt32 = 0x1 << 0
+
+    private var droplet: SKSpriteNode!
+    private var bucket : SKSpriteNode!
+
+    override func didMove(to view: SKView) {
+
+        physicsWorld.contactDelegate = self
+
+        droplet = SKSpriteNode(imageNamed: "droplet")
+        droplet.zPosition = 10
+        droplet.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 64.0, height: 64.0))
+        droplet.physicsBody?.affectedByGravity = false
+        droplet.physicsBody?.categoryBitMask = dropletCategory
+        droplet.physicsBody?.contactTestBitMask = bucketCategory
+        droplet.physicsBody?.collisionBitMask = 0
+
+        bucket = SKSpriteNode(imageNamed: "bucket")
+        bucket.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 64.0, height: 64.0))
+        bucket.physicsBody?.mass = 0
+        bucket.physicsBody?.affectedByGravity = false
+        bucket.physicsBody?.categoryBitMask = bucketCategory
+        bucket.physicsBody?.contactTestBitMask = dropletCategory
+        bucket.physicsBody?.collisionBitMask = 0
+        bucket.position.x = 0
+        bucket.position.y = -size.height * 0.5 + 40
+        addChild(bucket)
+
+        run(SKAction.repeatForever(
+                SKAction.sequence([
+                    SKAction.run { self.spawnRaindrop() },
+                    SKAction.wait(forDuration: 1.0)
+                ])))
+
+        run(SKAction.repeatForever(SKAction.playSoundFileNamed("rain.mp3", waitForCompletion: true)))
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            let position = touch.location(in: self)
+            bucket.position.x = position.x
+        }
+    }
+
+    override func update(_ currentTime: TimeInterval) {
+        if bucket.position.x < -size.width * 0.5 {
+            bucket.position.x = -size.width * 0.5
+        }
+        if bucket.position.x > size.width * 0.5 {
+            bucket.position.x = size.width * 0.5
+        }
+    }
+
+    func didBegin(_ contact: SKPhysicsContact) {
+        var droplet: SKNode!
+        if contact.bodyA.categoryBitMask == dropletCategory {
+            droplet = contact.bodyA.node!
+        } else if contact.bodyB.categoryBitMask == dropletCategory {
+            droplet = contact.bodyB.node!
+        }
+        if droplet != nil {
+            droplet.run(SKAction.sequence([
+                            SKAction.playSoundFileNamed("drop.wav", waitForCompletion: false),
+                            SKAction.removeFromParent()
+                        ]))
+        }
+    }
+
+    private func spawnRaindrop() {
+        if let dl = droplet.copy() as? SKSpriteNode {
+            let x = CGFloat(arc4random_uniform(UInt32(size.width))) - size.width * 0.5
+            dl.position.x = x
+            dl.position.y = size.height * 0.5 + 32
+            dl.run(SKAction.sequence([SKAction.moveBy(x:  0, y: -size.height - 64, duration: 2.0),
+                                      SKAction.removeFromParent()]))
+            addChild(dl)
+        }
+    }
+}
+```
+
+``` swift
+override func update(_ currentTime: TimeInterval) {
+    if bucket.position.x < -size.width * 0.5 {
+        bucket.position.x = -size.width * 0.5
+    }
+    if bucket.position.x > size.width * 0.5 {
+        bucket.position.x = size.width * 0.5
+    }
+    if let data = motionManager.accelerometerData {
+        if fabs(data.acceleration.y) > 0.2 {
+            if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+                bucket.position.x += 5 * (data.acceleration.y > 0 ? 1: -1)
+            } else {
+                bucket.position.x -= 5 * (data.acceleration.y > 0 ? 1: -1)
+            }
+        }
+    }
+}
+```
+
+
 ## ゲームアセット
 * 雨粒画像
  * https://www.box.com/s/peqrdkwjl6guhpm48nit
