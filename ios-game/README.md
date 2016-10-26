@@ -1,5 +1,78 @@
 # ゲーム完成イメージ
 
+<img src="./drop-game-sh.png" width="360" />
+
+画面をタップしてバケツを移動し、落ちてくる雨をキャッチするゲーム！
+
+参考元: <a href="https://github.com/libgdx/libgdx/wiki/A-simple-game">A simple game (ligGDX)</a>
+
+## 準備
+1. Xcode(バージョン8以上)をインストール
+2. <a href="./assets.zip">ゲームアセット(assets.zip)</a>をダウンロードして展開する
+
+## SpriteKitプロジェクトを作成
+1. Xcodeを起動し、「Create a new Xcode project」をクリック(画像参照)<br/>
+<img src="create-a-new-project.png" height="240" />
+2. 作成するプロジェクトのテンプレートとして、「Game」を選択(画像参照)<br/>
+<img src="select-the-game-template.png" height="240" />
+3. プロジェクトの情報として、以下を入力する:
+ * Product name: __drop__
+ * Team: <span style="color: #e74c3c;">適宜選択</span>
+ * Organization Name: <span style="color: #e74c3c;">適宜選択 (例: 氏名等)</span>
+ * Organization Identifier: __com.example__
+ * Language: __Swift__
+ * Game Category: __SpriteKit__
+ * Devices: __iPhone__
+ * Integrate GameplayKit: チェックを外す
+ * Include Unit Tests: チェックを外す
+ * Include UI Tests: チェックを外す
+4. 最後にプロジェクトの保存先を指定して、「Create」ボタンをクリックしてプロジェクトを作成
+
+## 実機での実行確認
+1. iPhoneをLightningケーブルでMacに接続する
+2. 実行ボタンをクリック
+3. 接続したiPhoneでサンプルのゲームが実行できることを確認する<br/>
+(画像参照)<br/>
+<img src="run-the-example-app.png" height="240" />
+
+## 画面表示方向の設定
+下図に従って、画面の表示方向を横長(Landscape Left/Landscape Right)のみにする:<br/>
+<img src="device-orientation.png" height="240" />
+
+## `GameViewController`クラスの設定
+1. プロジェクトナビゲーター中の__GameViewController.swift__をクリック(画像参照)<br/>
+<img src="navigator-gameviewcontroller.png" height="240" />
+2. 右側のソースコードエディタで、`viewDidLoad`メソッド中の`scene.scaleMode = .aspectFill`を`scene.scaleMode = .resizeFill`に書き換える:
+
+```swift
+override func viewDidLoad() {
+    super.viewDidLoad()
+
+    if let view = self.view as! SKView? {
+        // Load the SKScene from 'GameScene.sks'
+        if let scene = SKScene(fileNamed: "GameScene") {
+            // Set the scale mode to scale to fit the window
+            scene.scaleMode = .resizeFill
+
+            // Present the scene
+            view.presentScene(scene)
+        }
+
+        view.ignoresSiblingOrder = true
+
+        view.showsFPS = true
+        view.showsNodeCount = true
+    }
+}
+```
+
+## ゲームアセットの追加
+1. プロジェクトナビゲーター中の__Assets.xcassets__をクリック
+2. 「準備」の2でダウンロードして展開しておいたフォルダから__bucket.png__と__droplet.png__を選択し、Assets.xcassetsにドラッグ・アンド・ドロップしてゲームアセットとして追加する(画像参照)<br/>
+<img src="add-game-assets.png" height="240" />
+
+## `GameScene`クラスの変更 (ゲームコードの実装)
+
 ``` swift
 //
 //  GameScene.swift

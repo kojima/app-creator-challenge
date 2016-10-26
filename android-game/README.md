@@ -7,25 +7,19 @@
 参考元: <a href="https://github.com/libgdx/libgdx/wiki/A-simple-game">A simple game (ligGDX)</a>
 
 ## 準備
-1. [Android Studio](https://developer.android.com/studio/index.html?hl=ja)をインストール
+1. [Android Studio](https://developer.android.com/studio/index.html?hl=ja)(バージョン2.2以上)をインストール
 2. JAVA_HOME環境変数を設定する
  * 例: C¥Program Files¥Android¥Android Studio¥jre
 3. <a href="./libGDX.zip">ゲーム作成ツール(libGDX.zip)</a>をダウンロードして展開する
 
 ## ゲームプロジェクトを作成
-1. 「準備」の3で展開したフォルダ中の libGDX.bat ファイルをダブルクリックする(画像参照)
-
+1. 「準備」の3で展開したフォルダ中の libGDX.bat ファイルをダブルクリックする(画像参照)<br/>
 <img src="./libgdx-bat.png" height="240" style="margin: 16px">
-
-2. 以下のウィンドウが起動する:
-
+2. 以下のウィンドウが起動する:<br/>
 <img src="./libgdx-setup.png" height="320" style="margin: 16px">
-
 3. Android Studioを起動し、「File > Other Settings > Default Project Structure...」をクリック
-4. Android SDK location のパスをコピーする(画像参照)
-
+4. Android SDK location のパスをコピーする(画像参照)<br/>
 <img src="./android-studio-project-structure.png" height="320" style="margin: 16px">
-
 5. 2で起動したウィンドウに以下の内容を入力する:
  * Name: __drop__
  * Package: __com.example.drop__
@@ -43,10 +37,8 @@
 4. 新しいウィンドウが開き、プロジェクトが表示される
 
 ## スタータークラスを設定する
-1. Android Studioのプロジェクトタブから`AndroidLauncher.java`を探し出し、ダブルクリック(画像参照)
-
+1. Android Studioのプロジェクトタブから`AndroidLauncher.java`を探し出し、ダブルクリック(画像参照)<br/>
 <img src="./project-androidlauncher.png" height="320" style="margin: 16px">
-
 2. `AndroidLauncher.java`の`onCreate`メソッドを以下のように変更する:
 
 ``` java
@@ -72,16 +64,13 @@ public class AndroidLauncher extends AndroidApplication {
 追加した`config.useAccelerometer = false;`は加速度センサーを使用しないための設定で、`config.useCompass = false;`はGPSを使用しないための設定です。
 
 ## ゲームアセットの追加
-1. Android Studioのプロジェクトタブから__assets__フォルダを探し出し、右クリック(画像参照)
-
+1. Android Studioのプロジェクトタブから__assets__フォルダを探し出し、右クリック(画像参照)<br/>
 <img src="./project-assets.png" height="320" style="margin: 16px">
-
 2. 表示されたポップアップ中の__Show in Explorer__をクリック
 
 ## ゲームコード
 ゲーム中で使用するアセット(画像や効果音など)を読み込みます。
-1. Android Studioのプロジェクトタブから`Drop.java`を探し出し、ダブルクリック(画像参照)
-
+1. Android Studioのプロジェクトタブから`Drop.java`を探し出し、ダブルクリック(画像参照)<br/>
 <img src="./project-drop.png" height="320" style="margin: 16px">
 
 ## ソースコード全体
