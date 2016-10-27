@@ -133,14 +133,14 @@
 
 ### バケツをタップで移動させる
 1. `touchesBegan`メソッドを以下のように変更します:
-    ``` swift
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first {
-            let position = touch.location(in: self)
-            bucket.position.x = position.x
-        }
+``` swift
+override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    if let touch = touches.first {
+        let position = touch.location(in: self)
+        bucket.position.x = position.x
     }
-    ```
+}
+```
 2. 実行すると、バケツがタップした位置に移動することを確認できます
 
 ### 水滴を追加する
@@ -458,9 +458,8 @@ override func update(_ currentTime: TimeInterval) {
 }
 ```
 
-
-## ゲームアセット
-* 雨粒画像
+## 参考: ゲームアセット
+* 水滴画像
  * https://www.box.com/s/peqrdkwjl6guhpm48nit
 * バケツ画像
  * https://www.box.com/s/605bvdlwuqubtutbyf4x

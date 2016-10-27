@@ -54,8 +54,8 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useAccelerometer = false;
-		config.useCompass = false;
+		config.useAccelerometer = false;  // 加速度センサーを無効にする
+		config.useCompass = false;        // GPSセンサーを無効にする
 		initialize(new Drop(), config);
 	}
 }
@@ -68,10 +68,120 @@ public class AndroidLauncher extends AndroidApplication {
 <img src="./project-assets.png" height="320" style="margin: 16px">
 2. 表示されたポップアップ中の__Show in Explorer__をクリック
 
-## ゲームコード
-ゲーム中で使用するアセット(画像や効果音など)を読み込みます。
-1. Android Studioのプロジェクトタブから`Drop.java`を探し出し、ダブルクリック(画像参照)<br/>
+## `Drop`クラスの変更 (ゲームコードの実装)
+Android Studioのプロジェクトタブから`Drop.java`を探し出し、ダブルクリック(画像参照)<br/>
 <img src="./project-drop.png" height="320" style="margin: 16px">
+
+### コードの初期化
+`Drop.java`のコードの内容を削除し、一旦以下の状態にします:
+    ``` java
+    package com.example.drop;
+
+    public class Drop extends ApplicationAdapter {
+
+       @Override
+       public void create() {
+       }
+
+       @Override
+       public void render() {
+       }
+
+       @Override
+       public void dispose() {
+       }
+    }
+    ```
+### ゲームアセットの読み込み
+`Drop.java`の冒頭を以下のように変更して、ゲーム中で使用するアセット(画像や効果音など)を読み込みます:
+    ``` java
+    package com.example.drop;
+
+    import java.util.Iterator;
+
+    import com.badlogic.gdx.ApplicationAdapter;
+    import com.badlogic.gdx.Gdx;
+    import com.badlogic.gdx.Input.Keys;
+    import com.badlogic.gdx.audio.Music;
+    import com.badlogic.gdx.audio.Sound;
+    import com.badlogic.gdx.graphics.GL20;
+    import com.badlogic.gdx.graphics.OrthographicCamera;
+    import com.badlogic.gdx.graphics.Texture;
+    import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+    import com.badlogic.gdx.math.MathUtils;
+    import com.badlogic.gdx.math.Rectangle;
+    import com.badlogic.gdx.math.Vector3;
+    import com.badlogic.gdx.utils.Array;
+    import com.badlogic.gdx.utils.TimeUtils;
+
+    public class Drop extends ApplicationAdapter {
+       private Texture dropImage;
+       private Texture bucketImage;
+       private Sound dropSound;
+       private Music rainMusic;
+
+       @Override
+       public void create() {
+          // 64ピクセル x 64ピクセルの雨粒とバケツの画像を読み込みます
+          dropImage = new Texture(Gdx.files.internal("droplet.png"));
+          bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+
+          // 水滴の効果音と雨のBGMを読み込みます
+          dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
+          rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+
+          // 雨のBGMを再生します
+          rainMusic.setLooping(true);
+          rainMusic.play();
+       }
+       // ..以下省略.. この行は書きません
+    ```
+読み込んだ画像(droplet.pngとbucket.png)は、ゲーム内でテクスチャ(Texture)として扱われます
+### カメラとSpriteBatchの設定
+ゲームで使用する800ピクセルx400ピクセルのカメラ(Camera)を設定します。
+
+また、テクスチャ(Texture)を画面に描画するためのスプライトバッチ(SpriteBatch)を設定します。
+
+1. `Drop.java`の`private Music rainMusic;`の下に以下のようにプライベートフィールドを追加します:
+    ``` java
+    // ..以上省略..
+    public class Drop extends ApplicationAdapter {
+        private Texture dropImage;
+        private Texture bucketImage;
+        private Sound dropSound;
+        private Music rainMusic;
+        private OrthographicCamera camera;
+        private SpriteBatch batch;
+        // ..以下省略..
+    ```
+2. `onCreate`メソッドの末尾に以下のようにコードを追加します:
+    ``` java
+    @Override
+    public void create() {
+        // 64ピクセル x 64ピクセルの雨粒とバケツの画像を読み込みます
+        dropImage = new Texture(Gdx.files.internal("droplet.png"));
+        bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+
+        // 水滴の効果音と雨のBGMを読み込みます
+        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
+        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+
+        // 雨のBGMを再生します
+        rainMusic.setLooping(true);
+        rainMusic.play();
+
+        // カメラとSpriteBatchを生成します
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 480);
+        batch = new SpriteBatch();
+    }
+    ```
+### バケツの追加
+#### バケツの描画
+#### タッチでバケツを移動
+### 水滴の追加
+### クリーンアップ
+
 
 ## ソースコード全体
 今回作成したゲームの全ソースコードは以下の通りです:
@@ -89,8 +199,8 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useAccelerometer = false;
-		config.useCompass = false;
+		config.useAccelerometer = false;  // 加速度センサーを無効にする
+		config.useCompass = false;        // GPSセンサーを無効にする
 		initialize(new Drop(), config);
 	}
 }
@@ -233,8 +343,8 @@ public class Drop extends ApplicationAdapter {
 }
 ```
 
-## ゲームアセット
-* 雨粒画像
+## 参考: ゲームアセット
+* 水滴画像
  * https://www.box.com/s/peqrdkwjl6guhpm48nit
 * バケツ画像
  * https://www.box.com/s/605bvdlwuqubtutbyf4x
