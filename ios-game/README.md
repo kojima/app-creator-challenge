@@ -18,7 +18,7 @@
 3. プロジェクトの情報として、以下を入力する:
  * Product name: __drop__
  * Team: <span style="color: #e74c3c;">適宜選択</span>
- * Organization Name: <span style="color: #e74c3c;">適宜選択 (例: 氏名等)</span>
+ * Organization Name: <span style="color: #e74c3c;">適宜選択 (例: 氏名「Hidenori Kojima」等)</span>
  * Organization Identifier: __com.example__
  * Language: __Swift__
  * Game Category: __SpriteKit__
@@ -70,10 +70,14 @@ override func viewDidLoad() {
 1. プロジェクトナビゲーター中の__Assets.xcassets__をクリック
 2. 「準備」の2でダウンロードして展開しておいたフォルダから__bucket.png__と__droplet.png__を選択し、Assets.xcassetsにドラッグ・アンド・ドロップしてゲームアセットとして追加する(画像参照)<br/>
 <img src="add-game-assets.png" height="240" />
+3. 続いて、フォルダから__drop.wav__と__rain.mp3__を選択し、プロジェクトナビゲーター中のdropフォルダの下にドラッグ・アンド・ドロップする(画像参照)<br/>
+<img src="add-game-sounds.png" height="240" />
+4. 「Copy items if needed」にチェックが入っていることを確認して、「Finish」ボタンをクリックする(画像参照)<br/>
+<img src="check-copy-items.png" height="240" />
 
 ## `GameScene`クラスの変更 (ゲームコードの実装)
 ### クリーンアップ
-サンプルコードを削除し、一旦以下の状態にする:
+サンプルコードを削除し、一旦以下の状態にする:<br/>
 ``` swift
 //
 //  GameScene.swift
@@ -101,7 +105,7 @@ class GameScene: SKScene {
 }
 ```
 ### ゲームアセットの読み込み
-1. コードを以下のように追加し、ゲームで使用するアセット(画像)を読み込む:
+1. コードを以下のように追加し、ゲームで使用するアセット(画像)を読み込む:<br/>
 ``` swift
 // ..以上少省略.. ※この行は書きません
 
@@ -129,7 +133,7 @@ class GameScene: SKScene {
 2. 実行すると、バケツが画面中央下に表示されることが確認できます。水滴はまだ表示されません
 
 ### バケツをタップで移動させる
-1. `touchesBegan`メソッドを以下のように変更します:
+1. `touchesBegan`メソッドを以下のように変更します:<br/>
 ``` swift
 override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     if let touch = touches.first {
@@ -141,7 +145,7 @@ override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 2. 実行すると、バケツがタップした位置に移動することを確認できます
 
 ### 水滴を追加する
-1. `GameScene`クラスの末尾に`spawnRaindrop`メソッドを追加します:
+1. `GameScene`クラスの末尾に`spawnRaindrop`メソッドを追加します:<br/>
 ``` swift
     // ..以上省略..
     override func update(_ currentTime: TimeInterval) {
@@ -161,7 +165,7 @@ override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
 }
 ```
-2. `didMove(to view:_)`メソッドの末尾に以下のように変更します:
+2. `didMove(to view:_)`メソッドの末尾に以下のように変更します:<br/>
 ``` swift
 override func didMove(to view: SKView) {
 
@@ -187,7 +191,7 @@ override func didMove(to view: SKView) {
 3. 実行すると、水滴が1秒毎に画面上から降ってくることが確認できますが、水滴とバケツが触れてもまだ何も起こりません
 
 ### 水滴とバケツの衝突判定
-1. bucket(バケツ)とdroplet(水滴)に以下のように衝突設定を行います:
+1. bucket(バケツ)とdroplet(水滴)に以下のように衝突設定を行います:<br/>
 ``` swift
 // ..以上省略..
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -235,7 +239,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     // ..以下省略..
 ```
-2. `didBegin(_ contact:_)`メソッドを追加して、水滴とバケツが衝突した際の処理を行う:
+2. `didBegin(_ contact:_)`メソッドを追加して、水滴とバケツが衝突した際の処理を行う:<br/>
 ``` swift
     // ..以上省略..
     override func update(_ currentTime: TimeInterval) {
