@@ -106,30 +106,30 @@ class GameScene: SKScene {
 ```
 ### ゲームアセットの読み込み
 1. コードを以下のように追加し、ゲームで使用するアセット(画像)を読み込む:<br/>
-``` swift
-// ..以上少省略.. ※この行は書きません
-
-class GameScene: SKScene {
-
-    private var droplet: SKSpriteNode!
-    private var bucket : SKSpriteNode!
-
-    override func didMove(to view: SKView) {
-
-        droplet = SKSpriteNode(imageNamed: "droplet")
-        droplet.zPosition = 10  // 水滴がバケツより上に表示されるようにする
-
-        bucket = SKSpriteNode(imageNamed: "bucket")
-        bucket.position.x = 0                         // バケツを横方向の中央に配置する
-        bucket.position.y = -size.height * 0.5 + 40   // バケツを画面下端から少し上に配置する
-        addChild(bucket)
-
-        // 雨のBGMを繰り返し再生し続ける
-        run(SKAction.repeatForever(SKAction.playSoundFileNamed("rain.mp3", waitForCompletion: true)))
-    }
-
-    // ..以下少省略.. ※この行は書きません
-```
+    ``` swift
+    // ..以上少省略.. ※この行は書きません
+    
+    class GameScene: SKScene {
+    
+        private var droplet: SKSpriteNode!
+        private var bucket : SKSpriteNode!
+    
+        override func didMove(to view: SKView) {
+    
+            droplet = SKSpriteNode(imageNamed: "droplet")
+            droplet.zPosition = 10  // 水滴がバケツより上に表示されるようにする
+    
+            bucket = SKSpriteNode(imageNamed: "bucket")
+            bucket.position.x = 0                         // バケツを横方向の中央に配置する
+            bucket.position.y = -size.height * 0.5 + 40   // バケツを画面下端から少し上に配置する
+            addChild(bucket)
+    
+            // 雨のBGMを繰り返し再生し続ける
+            run(SKAction.repeatForever(SKAction.playSoundFileNamed("rain.mp3", waitForCompletion: true)))
+        }
+    
+        // ..以下少省略.. ※この行は書きません
+    ```
 2. 実行すると、バケツが画面中央下に表示されることが確認できます。水滴はまだ表示されません
 
 ### バケツをタップで移動させる
@@ -180,7 +180,7 @@ override func didMove(to view: SKView) {
     // 雨のBGMを繰り返し再生し続ける
     run(SKAction.repeatForever(SKAction.playSoundFileNamed("rain.mp3", waitForCompletion: true)))
 
-    // 1秒毎に水滴を追加する
+    // 1秒毎にspawnRaindropメソッドを実行して水滴を追加する
     run(SKAction.repeatForever(
             SKAction.sequence([
                 SKAction.run { self.spawnRaindrop() },
