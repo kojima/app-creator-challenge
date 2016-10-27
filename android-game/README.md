@@ -74,90 +74,54 @@ Android Studioのプロジェクトタブから`Drop.java`を探し出し、ダ�
 
 ### コードの初期化
 `Drop.java`のコードの内容を削除し、一旦以下の状態にします:
-    ``` java
-    package com.example.drop;
+  ``` java
+  package com.example.drop;
 
-    public class Drop extends ApplicationAdapter {
+  public class Drop extends ApplicationAdapter {
 
-       @Override
-       public void create() {
-       }
+     @Override
+     public void create() {
+     }
 
-       @Override
-       public void render() {
-       }
+     @Override
+     public void render() {
+     }
 
-       @Override
-       public void dispose() {
-       }
-    }
-    ```
+     @Override
+     public void dispose() {
+     }
+  }
+  ```
 ### ゲームアセットの読み込み
 `Drop.java`の冒頭を以下のように変更して、ゲーム中で使用するアセット(画像や効果音など)を読み込みます:
-    ``` java
-    package com.example.drop;
+  ``` java
+  package com.example.drop;
 
-    import java.util.Iterator;
+  import java.util.Iterator;
 
-    import com.badlogic.gdx.ApplicationAdapter;
-    import com.badlogic.gdx.Gdx;
-    import com.badlogic.gdx.Input.Keys;
-    import com.badlogic.gdx.audio.Music;
-    import com.badlogic.gdx.audio.Sound;
-    import com.badlogic.gdx.graphics.GL20;
-    import com.badlogic.gdx.graphics.OrthographicCamera;
-    import com.badlogic.gdx.graphics.Texture;
-    import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-    import com.badlogic.gdx.math.MathUtils;
-    import com.badlogic.gdx.math.Rectangle;
-    import com.badlogic.gdx.math.Vector3;
-    import com.badlogic.gdx.utils.Array;
-    import com.badlogic.gdx.utils.TimeUtils;
+  import com.badlogic.gdx.ApplicationAdapter;
+  import com.badlogic.gdx.Gdx;
+  import com.badlogic.gdx.Input.Keys;
+  import com.badlogic.gdx.audio.Music;
+  import com.badlogic.gdx.audio.Sound;
+  import com.badlogic.gdx.graphics.GL20;
+  import com.badlogic.gdx.graphics.OrthographicCamera;
+  import com.badlogic.gdx.graphics.Texture;
+  import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+  import com.badlogic.gdx.math.MathUtils;
+  import com.badlogic.gdx.math.Rectangle;
+  import com.badlogic.gdx.math.Vector3;
+  import com.badlogic.gdx.utils.Array;
+  import com.badlogic.gdx.utils.TimeUtils;
 
-    public class Drop extends ApplicationAdapter {
-       private Texture dropImage;
-       private Texture bucketImage;
-       private Sound dropSound;
-       private Music rainMusic;
+  public class Drop extends ApplicationAdapter {
+     private Texture dropImage;
+     private Texture bucketImage;
+     private Sound dropSound;
+     private Music rainMusic;
 
-       @Override
-       public void create() {
-          // 64ピクセル x 64ピクセルの雨粒とバケツの画像を読み込みます
-          dropImage = new Texture(Gdx.files.internal("droplet.png"));
-          bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-
-          // 水滴の効果音と雨のBGMを読み込みます
-          dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-          rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-
-          // 雨のBGMを再生します
-          rainMusic.setLooping(true);
-          rainMusic.play();
-       }
-       // ..以下省略.. この行は書きません
-    ```
-読み込んだ画像(droplet.pngとbucket.png)は、ゲーム内でテクスチャ(Texture)として扱われます
-### カメラとSpriteBatchの設定
-ゲームで使用する800ピクセルx400ピクセルのカメラ(Camera)を設定します。
-
-また、テクスチャ(Texture)を画面に描画するためのスプライトバッチ(SpriteBatch)を設定します。
-
-1. `Drop.java`の`private Music rainMusic;`の下に以下のようにプライベートフィールドを追加します:
-    ``` java
-    // ..以上省略..
-    public class Drop extends ApplicationAdapter {
-        private Texture dropImage;
-        private Texture bucketImage;
-        private Sound dropSound;
-        private Music rainMusic;
-        private OrthographicCamera camera;
-        private SpriteBatch batch;
-        // ..以下省略..
-    ```
-2. `onCreate`メソッドの末尾に以下のようにコードを追加します:
-    ``` java
-    @Override
-    public void create() {
+     @Override
+     public void create() {
         // 64ピクセル x 64ピクセルの雨粒とバケツの画像を読み込みます
         dropImage = new Texture(Gdx.files.internal("droplet.png"));
         bucketImage = new Texture(Gdx.files.internal("bucket.png"));
@@ -169,15 +133,144 @@ Android Studioのプロジェクトタブから`Drop.java`を探し出し、ダ�
         // 雨のBGMを再生します
         rainMusic.setLooping(true);
         rainMusic.play();
+     }
+     // ..以下省略.. この行は書きません
+  ```
+読み込んだ画像(droplet.pngとbucket.png)は、ゲーム内でテクスチャ(Texture)として扱われます
+### カメラとSpriteBatchの設定
+ゲームで使用する800x400のカメラ(Camera)を設定します。
 
-        // カメラとSpriteBatchを生成します
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
-        batch = new SpriteBatch();
-    }
-    ```
+また、テクスチャ(Texture)を画面に描画するためのスプライトバッチ(SpriteBatch)を設定します。
+
+1. `Drop.java`の`private Music rainMusic;`の下に以下のようにプライベートフィールドを追加します:
+  ``` java
+  // ..以上省略..
+  public class Drop extends ApplicationAdapter {
+      private Texture dropImage;
+      private Texture bucketImage;
+      private Sound dropSound;
+      private Music rainMusic;
+      private OrthographicCamera camera;
+      private SpriteBatch batch;
+      // ..以下省略..
+  ```
+2. `onCreate`メソッドの末尾に以下のようにコードを追加します:
+  ``` java
+  @Override
+  public void create() {
+      // 64ピクセル x 64ピクセルの雨粒とバケツの画像を読み込みます
+      dropImage = new Texture(Gdx.files.internal("droplet.png"));
+      bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+
+      // 水滴の効果音と雨のBGMを読み込みます
+      dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
+      rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+
+      // 雨のBGMを再生します
+      rainMusic.setLooping(true);
+      rainMusic.play();
+
+      // カメラとSpriteBatchを生成します
+      camera = new OrthographicCamera();
+      camera.setToOrtho(false, 800, 480);
+      batch = new SpriteBatch();
+  }
+  ```
 ### バケツの追加
+バケツの画面内での位置を管理するために四角形を用意します。四角形は64x64の大きさで、左下の位置を指定します。
+1. `Drop.java`の`private SpriteBatch batch;`の下に以下のようにプライベートフィールドを追加します:
+  ``` java
+  // ..以上省略..
+  public class Drop extends ApplicationAdapter {
+      private Texture dropImage;
+      private Texture bucketImage;
+      private Sound dropSound;
+      private Music rainMusic;
+      private OrthographicCamera camera;
+      private SpriteBatch batch;
+      private Rectangle bucket;
+      // ..以下省略..
+  ```
+2. `onCreate`メソッドの末尾に以下のようにコードを追加します:
+  ``` java
+  @Override
+  public void create() {
+      // 64ピクセル x 64ピクセルの雨粒とバケツの画像を読み込みます
+      dropImage = new Texture(Gdx.files.internal("droplet.png"));
+      bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+
+      // 水滴の効果音と雨のBGMを読み込みます
+      dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
+      rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+
+      // 雨のBGMを再生します
+      rainMusic.setLooping(true);
+      rainMusic.play();
+
+      // カメラとSpriteBatchを生成します
+      camera = new OrthographicCamera();
+      camera.setToOrtho(false, 800, 480);
+      batch = new SpriteBatch();
+
+      // バケツをプログラムで扱うための四角形を生成します
+      bucket = new Rectangle();
+      bucket.x = 800 / 2 - 64 / 2; // 横方向の中心にバケツを配置します
+      bucket.y = 20; // バケツの左下が画面下端から20ピクセル離れた位置になるように配置します
+      bucket.width = 64;
+      bucket.height = 64;
+  }
+  ```
 #### バケツの描画
+バケツを画面内に描画するプログラムを書きます。
+1. まず、`render`メソッドの冒頭に以下のようにコードを追加し、スクリーンをダーク・ブルーに塗りぶします:
+  ``` java
+  @Override
+  public void render() {
+     // スクリーンをダーク・ブルーに塗りつぶします。
+     // glClearColorの引数は、赤/緑/青/透明度の4つで、
+     // 0から1の範囲の小数でします。指定した色が画面色になります。
+     Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+  }
+  ```
+2. 次に、カメラ(camera)にアップデートを伝えます。今回のゲームではカメラの位置やアングルは変わりませんが、より複雑なゲームになってくると、カメラの位置やアングルを状況によって変えたいことがあります。そういう場合に、以下のように`camera.update();`を呼び出します:
+``` java
+@Override
+public void render() {
+   // スクリーンをダーク・ブルーに塗りつぶします。
+   // glClearColorの引数は、赤/緑/青/透明度の4つで、
+   // 0から1の範囲の小数でします。指定した色が画面色になります。
+   Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+   Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+   // カメラ用の配列をアップデートします
+   camera.update();
+}
+```
+前述のように、今回はカメラの位置やアングルは変わりませんが、上記のように`render`メソッド内でカメラをアップデートする習慣にしましょう。
+3. 最後に、以下のコードを`render`メソッドの末尾に追加して、バケツを画面内に描画します:
+@Override
+public void render() {
+   // スクリーンをダーク・ブルーに塗りつぶします。
+   // glClearColorの引数は、赤/緑/青/透明度の4つで、
+   // 0から1の範囲の小数でします。指定した色が画面色になります。
+   Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+   Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+   // カメラ用の配列をアップデートします
+   camera.update();
+
+   // SpriteBatchに、カメラで指定された座標系に
+   // レンダリングするよう命令します
+   batch.setProjectionMatrix(camera.combined);
+
+   // 新しいバッチを開始して、バケツとすべての雨粒を描画します
+   batch.begin();
+   batch.draw(bucketImage, bucket.x, bucket.y);
+   batch.end();
+}
+```
+画面内への画像の描画は、スプライトバッチ(SpriteBatch)に情報を渡して行います。
 #### タッチでバケツを移動
 ### 水滴の追加
 ### クリーンアップ
