@@ -132,15 +132,15 @@
 2. 実行すると、バケツが画面中央下に表示されることが確認できます。水滴はまだ表示されません
 
 ### バケツをタップで移動させる
-1. `touchesBegan`メソッドを以下のように変更します:<br/>
-``` swift
-override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if let touch = touches.first {
-        let position = touch.location(in: self)
-        bucket.position.x = position.x
+1. `touchesBegan`メソッドを以下のように変更します:
+    ``` swift
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            let position = touch.location(in: self)
+            bucket.position.x = position.x
+        }
     }
-}
-```
+    ```
 2. 実行すると、バケツがタップした位置に移動することを確認できます
 
 ### 水滴を追加する
