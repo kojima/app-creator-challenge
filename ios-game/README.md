@@ -1,6 +1,6 @@
 # ゲーム完成イメージ
 
-<img src="./drop-game-sh.png" width="360" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/drop-game-sh.png" width="360" />
 
 画面をタップしてバケツを移動し、落ちてくる雨をキャッチするゲーム！
 
@@ -8,13 +8,13 @@
 
 ## 準備
 1. Xcode(バージョン8以上)をインストール
-2. <a href="./assets.zip">ゲームアセット(assets.zip)</a>をダウンロードして展開する
+2. <a href="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/assets.zip">ゲームアセット(assets.zip)</a>をダウンロードして展開する
 
 ## SpriteKitプロジェクトを作成
 1. Xcodeを起動し、「Create a new Xcode project」をクリック(画像参照)<br/>
-<img src="create-a-new-project.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/create-a-new-project.png" height="240" />
 2. 作成するプロジェクトのテンプレートとして、「Game」を選択(画像参照)<br/>
-<img src="select-the-game-template.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/select-the-game-template.png" height="240" />
 3. プロジェクトの情報として、以下を入力する:
  * Product name: __drop__
  * Team: <span style="color: #e74c3c;">適宜選択</span>
@@ -33,15 +33,21 @@
 2. 実行ボタンをクリック
 3. 接続したiPhoneでサンプルのゲームが実行できることを確認する<br/>
 (画像参照)<br/>
-<img src="run-the-example-app.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/run-the-example-app.png" height="240" />
+4. 実行ボタン横の停止ボタンをクリックして、実行を停止する
 
 ## 画面表示方向の設定
 下図に従って、画面の表示方向を横長(Landscape Left/Landscape Right)のみにする:<br/>
-<img src="device-orientation.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/device-orientation.png" height="240" />
+
+## サンプル要素の削除
+1. プロジェクトナビゲーター中の__GameScene.sks__をクリック(画像参照)
+2. 右側に表示されたシーンエディタ中から__helloLabel__をクリックして選択し、deleteキーで削除する(画像参照)<br/>
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/delete-hellolabel.png" height="240" />
 
 ## `GameViewController`クラスの設定
 1. プロジェクトナビゲーター中の__GameViewController.swift__をクリック(画像参照)<br/>
-<img src="navigator-gameviewcontroller.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/navigator-gameviewcontroller.png" height="240" />
 2. 右側のソースコードエディタで、`viewDidLoad`メソッド中の`scene.scaleMode = .aspectFill`を`scene.scaleMode = .resizeFill`に書き換える:
     ```swift
     override func viewDidLoad() {
@@ -68,41 +74,42 @@
 ## ゲームアセットの追加
 1. プロジェクトナビゲーター中の__Assets.xcassets__をクリック
 2. 「準備」の2でダウンロードして展開しておいたフォルダから__bucket.png__と__droplet.png__を選択し、Assets.xcassetsにドラッグ・アンド・ドロップしてゲームアセットとして追加する(画像参照)<br/>
-<img src="add-game-assets.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/add-game-assets.png" height="240" />
 3. 続いて、フォルダから__drop.wav__と__rain.mp3__を選択し、プロジェクトナビゲーター中のdropフォルダの下にドラッグ・アンド・ドロップする(画像参照)<br/>
-<img src="add-game-sounds.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/add-game-sounds.png" height="240" />
 4. 「Copy items if needed」にチェックが入っていることを確認して、「Finish」ボタンをクリックする(画像参照)<br/>
-<img src="check-copy-items.png" height="240" />
+<img src="https://github.com/kojima/app-creator-challenge/blob/master/ios-game/check-copy-items.png" height="240" />
 
 ## `GameScene`クラスの変更 (ゲームコードの実装)
 ### クリーンアップ
 サンプルコードを削除し、一旦以下の状態にする:
-    ``` swift
-    //
-    //  GameScene.swift
-    //  drop
-    //
-    //  Created by Hidenori Kojima on 2016/10/25.
-    //  Copyright © 2016年 Hidenori Kojima. All rights reserved.
-    //
+  ``` swift
 
-    import SpriteKit
-    import GameplayKit
+  //
+  //  GameScene.swift
+  //  drop
+  //
+  //  Created by Hidenori Kojima on 2016/10/25.
+  //  Copyright © 2016年 Hidenori Kojima. All rights reserved.
+  //
 
-    class GameScene: SKScene {
+  import SpriteKit
+  import GameplayKit
 
-        override func didMove(to view: SKView) {
-        }
+  class GameScene: SKScene {
+
+      override func didMove(to view: SKView) {
+      }
 
 
-        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        }
+      override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+      }
 
-        override func update(_ currentTime: TimeInterval) {
-            // Called before each frame is rendered
-        }
-    }
-    ```
+      override func update(_ currentTime: TimeInterval) {
+          // Called before each frame is rendered
+      }
+  }
+  ```
 ### ゲームアセットの読み込み
 1. コードを以下のように追加し、ゲームで使用するアセット(画像)を読み込む:
     ``` swift
@@ -131,17 +138,17 @@
     ```
 2. 実行すると、バケツが画面中央下に表示されることが確認できます。水滴はまだ表示されません
 
-### バケツをタップで移動させる
-1. `touchesBegan`メソッドを以下のように変更します:
+### バケツをタッチで移動させる
+1. `touchesMoved`メソッドを以下のように変更します:
 ``` swift
-override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     if let touch = touches.first {
         let position = touch.location(in: self)
         bucket.position.x = position.x
     }
 }
 ```
-2. 実行すると、バケツがタップした位置に移動することを確認できます
+2. 実行して画面を指で触れると、バケツが指が触れた位置に移動することを確認できます
 
 ### 水滴を追加する
 1. `GameScene`クラスの末尾に`spawnRaindrop`メソッドを追加します:
@@ -167,7 +174,7 @@ override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         }
     }
     ```
-2. `didMove(to view:_)`メソッドの末尾に以下のように変更します:
+2. `didMove(to view:_)`メソッドの末尾に以下のようにコードを追加します:
     ``` swift
     override func didMove(to view: SKView) {
 
@@ -193,9 +200,9 @@ override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 3. 実行すると、水滴が1秒毎に画面上から降ってくることが確認できますが、水滴とバケツが触れてもまだ何も起こりません
 
 ### 水滴とバケツの衝突判定
-1. bucket(バケツ)とdroplet(水滴)に以下のように衝突設定を行います:
+1. 以下のように`GameScene`クラスにコードを追加して、bucket(バケツ)とdroplet(水滴)の衝突設定を行います:
     ``` swift
-    // ..以上省略..
+    // ..以上省略..            *** ↓ SKPhysicsContactDelegateの追加を忘れずに ***
     class GameScene: SKScene, SKPhysicsContactDelegate {
 
         private let dropletCategory: UInt32 = 0x1 << 1  // 水滴の衝突判定カテゴリを10(2進数)にする
@@ -266,12 +273,17 @@ override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             }
         }
 
+        // 新しい水滴を追加する
         private func spawnRaindrop() {
         // ..以下省略..
     ```
-3. 実行し、バケツと水滴が触れると音が鳴って水滴が消えることが確認できます
 
-以上でゲームの完成です！
+## ゲーム完成！
+実行してみましょう。
+
+画面を指でタッチすると、バケツが移動することが確認できます。また、バケツと水滴が触れると、水滴が落ちる効果音が鳴って水滴が消えることが確認できます。
+
+これまでに書いたコードをもう一度見直して、ゲームの仕組みを解明してみましょう。
 
 ## 全ソースコード
 これまでにプログラムしたコードの全体を以下に掲載します:
@@ -392,7 +404,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 ])))    
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             let position = touch.location(in: self)
             bucket.position.x = position.x
@@ -433,26 +445,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             dl.run(SKAction.sequence([SKAction.moveBy(x:  0, y: -size.height - 64, duration: 2.0),
                                       SKAction.removeFromParent()]))
             addChild(dl)
-        }
-    }
-}
-```
-
-``` swift
-override func update(_ currentTime: TimeInterval) {
-    if bucket.position.x < -size.width * 0.5 {
-        bucket.position.x = -size.width * 0.5
-    }
-    if bucket.position.x > size.width * 0.5 {
-        bucket.position.x = size.width * 0.5
-    }
-    if let data = motionManager.accelerometerData {
-        if fabs(data.acceleration.y) > 0.2 {
-            if UIApplication.shared.statusBarOrientation == .landscapeLeft {
-                bucket.position.x += 5 * (data.acceleration.y > 0 ? 1: -1)
-            } else {
-                bucket.position.x -= 5 * (data.acceleration.y > 0 ? 1: -1)
-            }
         }
     }
 }
